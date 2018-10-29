@@ -13,7 +13,10 @@ switch type
         
         I((1+off):(end-off), round(Ny*cx)) = A*atan(10*sin(2*pi*f*t))/pi;
 
-    
+
+        
+        
+        
     case 'plain_sine_x'
         cx = parameters.cx; 
         A = parameters.amplitude;

@@ -15,6 +15,9 @@ S.Nx = 2048; % CASE HIRES
 S.Ny = 1065; % CASE HIRES
 S.Nt = 1500;
 
+%S.Nx = 2*S.Nx; % CASE SUPER HIRES
+%S.Ny = 2*S.Ny; % CASE SUPER HIRES
+
 S.dy = 1/max([S.Ny S.Nx]);
 S.dx = S.dy;
 
@@ -48,6 +51,95 @@ S.sources_parameters{1}.time = 0;
 switch name
 
     
+    case '4F Colimator'
+    
+        sc = 2.56;
+        sc = 1.5;
+        
+        % FD-TD grid
+        S.Nx = round(800*sc);
+        S.Ny = round(416*sc);
+
+        S.dy = 1/max([S.Ny S.Nx]);
+        S.dx = S.dy;
+
+        CLF = sqrt(inv(S.dx^2)+inv(S.dy^2));
+        
+        S.dt = 1/CLF;
+        
+        % Absorving boundaries
+
+        S.wire = ones(S.Ny,S.Nx,className);
+        S.er = ones(S.Ny,S.Nx,className);
+        S.ur = ones(S.Ny,S.Nx,className);
+        S.s = zeros(S.Ny,S.Nx,className);
+        
+        % Absorving boundaries
+        p.L = 60*sqrt(sc);
+        p.maxS = 120*sqrt(sc);
+        S.s = toClass(generateConductivity(S.Nx, S.Ny, 'boundary', p),className);
+        
+        
+        
+        % lens support
+        p.upper_left_x = 0.87;
+        p.upper_left_y = 0.001;
+        p.lower_right_x = 0.92;
+        p.lower_right_y = 0.25;
+        p.value = 550;
+        S.s = S.s + toClass(generateConductivity(S.Nx, S.Ny, 'box', p),className);
+        
+        p.upper_left_x = 0.87;
+        p.upper_left_y = 0.75;
+        p.lower_right_x = 0.92;
+        p.lower_right_y = 0.99;
+        p.value = 550;
+        S.s = S.s + toClass(generateConductivity(S.Nx, S.Ny, 'box', p),className);
+        
+        for i = 1:21
+            S.s = conv2(S.s,[0 1 0; 1 1 1; 0 1 0]/5,'same');
+        end
+
+        
+        
+        % lens
+        p.cx = 0.9;
+        p.cy = 0.5;
+        p.r_left = 0.08;
+        p.r_right = 0.08;
+        p.R = 0.3;
+        p.er = 3;
+        S.er = toClass(generateEpsilon(S.Nx, S.Ny, 'lens', p),className);
+
+        
+        
+        
+
+        % sources config
+
+        % sine
+        S.sources_name{1} = 'sine';
+        S.sources_parameters{1}.cx = 0.25;
+        S.sources_parameters{1}.cy = 0.5;
+        S.sources_parameters{1}.amplitude = 100;
+        S.sources_parameters{1}.width = 0.03;
+        S.sources_parameters{1}.t0 =  S.sources_parameters{1}.width*6 + 0.03;
+        S.sources_parameters{1}.time = 0;
+        S.sources_parameters{1}.s2 = 0.03;
+        S.sources_parameters{1}.frequency = 80;
+
+        
+        % sine
+        S.sources_name{2} = 'sine';
+        S.sources_parameters{2}.cx = 0.25;
+        S.sources_parameters{2}.cy = 0.75;
+        S.sources_parameters{2}.amplitude = 50;
+        S.sources_parameters{2}.width = 0.03;
+        S.sources_parameters{2}.t0 =  S.sources_parameters{1}.width*6 + 0.03;
+        S.sources_parameters{2}.time = 0;
+        S.sources_parameters{2}.s2 = 0.03;
+        S.sources_parameters{2}.frequency = 60;
+        
     
     case 'RV'
 

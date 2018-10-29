@@ -20,7 +20,8 @@ movieName = 'output/movie.avi';
 colormapsName = 'default';
 
 % simulation configuration
-S = configSimulation('RV', className);
+S = configSimulation('4F Colimator', className);
+%S = configSimulation('RV', className);
 %S = configSimulation('antireflex', className);
 %S = configSimulation('fabry perot', className);
 %S = configSimulation('single lens', className);
@@ -192,21 +193,22 @@ while ishandle(F)
 %         hold('on');
 %         plot(linspace(1,Nfourier,Nfourier/32),X2f(fix(1:end/32))/max(X2f))
         
-        hold('on');
+        % RV Stuff
+%         hold('on');
+% 
+%         xIdx = round(Nx*samplingStartX:Nx*samplingEndX);
+%         yIdxS = round(Ny*0.5);
+%         yIdxT = round(Ny*0.25);
+%         yIdxF = round(Ny*0.75);
+%         samplingY = 5*Ez(yIdxS, xIdx);
+%         plot(A, xIdx, ones(size(xIdx))*yIdxS,':','color',[0.5 0.5 0.5],'linewidth',4);
+%         plot(A, xIdx, samplingY*3 + yIdxT,'w','linewidth',3);
+%         tmpF = abs(fft(samplingY))/6;
+%         xtmp = xIdx(1:2:end);
+%         tmpF = tmpF(1:length(xtmp));
+%         plot(A, xtmp, -tmpF/3 + yIdxF,'y','linewidth',3);
 
-        xIdx = round(Nx*samplingStartX:Nx*samplingEndX);
-        yIdxS = round(Ny*0.5);
-        yIdxT = round(Ny*0.25);
-        yIdxF = round(Ny*0.75);
-        samplingY = 5*Ez(yIdxS, xIdx);
-        plot(A, xIdx, ones(size(xIdx))*yIdxS,':','color',[0.5 0.5 0.5],'linewidth',4);
-        plot(A, xIdx, samplingY*3 + yIdxT,'w','linewidth',3);
-        tmpF = abs(fft(samplingY))/6;
-        xtmp = xIdx(1:2:end);
-        tmpF = tmpF(1:length(xtmp));
-        plot(A, xtmp, -tmpF/3 + yIdxF,'y','linewidth',3);
-
-        plot(A,drawX,drawY,'color',[0.5 0.5 0.5],'linewidth',4);
+%         plot(A,drawX,drawY,'color',[0.5 0.5 0.5],'linewidth',4);
         
 
         drawnow();
